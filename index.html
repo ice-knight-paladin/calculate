@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="font/font.css">
+    <title>calculator</title>
+</head>
+<body>
+    
+    <article class="calc">
+        <div class="keyboard">
+          
+         <output class="calc_result " id="result">0</output>
+         
+         <div class="switch">
+        <input type="checkbox" id="one" onchange="fun1()">
+         </div>
+   
+         <div class="buttons" id="btn">
+         <button type="button" class= "calc_btn calc_btn_black" id="ac">СП</button>
+         <output class="calc_result1 " id="result"> </output>
+
+
+         <button class="button calc_btn calc_btn_black">7</button>
+         <button class="button calc_btn calc_btn_black">8</button>
+         <button class="button calc_btn calc_btn_black">9</button>
+         <output class="calc_result1 " id="result"> </output>
+
+
+         <button class="button calc_btn calc_btn_black calc_btn_basic">÷</button>
+         <button class="button calc_btn calc_btn_black">%</button>
+         <button class="button calc_btn calc_btn_red" id="big_btn_row">C</button>
+         <button class="button calc_btn calc_btn_black">П+</button>
+         <output class="calc_result1 " id="result"> </output>
+
+
+         <button class="button calc_btn calc_btn_black">4</button>
+         <button class="button calc_btn calc_btn_black">5</button>
+         <button class="button calc_btn calc_btn_black">6</button>
+         <output class="calc_result1 " id="result"> </output>
+
+         <button class="button calc_btn calc_btn_black">X</button>
+         <button class="button calc_btn calc_btn_black">1/x</button>   
+         
+         <button class="button calc_btn calc_btn_black">П-</button>
+         <output class="calc_result1 " id="result"> </output>
+
+         <button class="button calc_btn calc_btn_black">1</button>
+         <button class="button calc_btn calc_btn_black">2</button>
+         <button class="button calc_btn calc_btn_black">3</button>
+         <output class="calc_result1 " id="result"> </output>
+
+         <button class="button calc_btn calc_btn_black">-</button>
+         <button class="button calc_btn calc_btn_black">/-/</button>
+         <button class="button calc_btn calc_btn_black">↔</button>
+
+         <button class="button calc_btn calc_btn_black">ИП</button>
+         <output class="calc_result1 " id="result"> </output>
+
+         <button class="button calc_btn calc_btn_black" id="big_btn_col">0</button>
+         <button class="button calc_btn calc_btn_black">,</button>
+         <output class="calc_result1 " id="result"> </output>
+
+         <button class="button calc_btn calc_btn_black">+</button>
+         <button class="button calc_btn calc_btn_black" id="big_btn_col">=</button>
+         </div>
+        </div>
+       
+    </article>
+
+    <script src="script.js"></script>
+</body>
+</html>

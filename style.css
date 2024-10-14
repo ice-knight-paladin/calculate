@@ -1,0 +1,114 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.calc {
+    width: 1000;
+    height: 820px;
+    background: url(images/MK-42.png);
+}
+.calc_result {
+    font-family: "Electronica";
+    margin-top: 337px;
+    margin-left: 25px;
+    text-indent: 120px;
+    text-shadow: 2px 1px 1px #25a159;
+    height: 40px;
+    width: 602px;
+    display: grid;
+    justify-items: auto;
+    grid-column: 1/-1;
+    background-color: rgb(26, 24, 24);
+    color: rgb(62, 151, 62);
+    font-size: 40px;
+    padding: 2px;
+}
+.buttons {
+    margin-left: 20px;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-auto-rows: 40px;    
+    gap: 17px;
+}
+.calc_btn {
+    font-family: "GOST_A";
+    font-weight: bold;
+    font-size: 20px;
+    width: 42px;
+    text-align: center;
+    padding-top: 4px;
+    border-radius: 2px;
+    cursor: pointer;
+    background-color: rgb(255, 246, 246);
+    box-shadow: 2px 3px 2px rgb(0, 0, 0, 0.5);
+}
+
+#big_btn_col {
+    grid-column: span 2;
+    width: 112px;
+}
+
+#big_btn_row {
+    grid-row: span 2;
+    height: 98px;
+}
+
+.calc_btn:active {
+    box-shadow: 1px 1px 2px rgb(0, 0, 0, 0.5);
+}
+.calc_btn_black {
+    background-color: rgb(36, 29, 29);
+    color: #fff;
+}
+.calc_btn_red {
+    background-color: rgb(184, 44, 44);
+    color: #fff;
+}
+.calc_btn_basic {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 25px;
+}
+.switch {
+    margin-top: 30px;
+    margin-left: 540px;
+}
+
+.btn_pi {
+    font-family: "GOST";
+    font-size: 24px;
+}
+
+input[type="checkbox"] {
+    position: relative;
+    width: 80px;
+    height: 25px;
+    border-radius: 2px;
+    -webkit-appearance: none;
+    outline: none;
+    background: #1b1717;
+    transition: 0.5s;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+input[type="checkbox"]:before {
+    content: "";
+    position: absolute;
+    width: 55px;
+    height: 25px;
+    top: 0;
+    left: 0;
+    border-radius: 2px;
+    background: rgb(49, 49, 49);
+    transition: 0.5s;
+    transform: scale(1, 1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+input:checked[type="checkbox"]:before {
+    left: 25px;
+}
