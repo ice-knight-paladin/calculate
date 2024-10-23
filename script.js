@@ -13,7 +13,7 @@ var mistakeCheck = 0;
 var oper = '';
 var timesClicked = 0;
 var reduction;
-input.value = '0';
+input.value = '0.00';  
 
 function fun1() {
     var ch;
@@ -90,7 +90,7 @@ function reset(){
     lastInput = '';  
     firstInput = '';  
     tempInput = '';  
-    input.value = '0';  
+    input.value = '0.00';  
     isOperatorClicked = false;  
 
 }
