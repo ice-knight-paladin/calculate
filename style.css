@@ -15,6 +15,8 @@ body {
 }
 .calc_result {
     font-family: "Electronica";
+    padding-right: 50px;
+    text-align: right;
     margin-top: 337px;
     margin-left: 25px;
     text-indent: 120px;
@@ -23,11 +25,9 @@ body {
     width: 602px;
     display: grid;
     justify-items: auto;
-    grid-column: 1/-1;
     background-color: rgb(26, 24, 24);
     color: rgb(62, 151, 62);
     font-size: 40px;
-    padding: 2px;
 }
 .buttons {
     margin-left: 20px;
