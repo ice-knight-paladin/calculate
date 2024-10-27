@@ -13,7 +13,7 @@ var mistakeCheck = 0;
 var oper = '';
 var timesClicked = 0;
 var reduction;
-input.value = '0.00';  
+input.value = '0.00 ';
 
 function fun1() {
     var ch;
@@ -43,7 +43,7 @@ function calculate(){
         }
         currentInput = currentInput.replace(/,/g, '.');
         var result = eval(currentInput);
-        if(result > (10**16 - 1)) {
+        if(result > (10**13 - 1)) {
             tempInput = '';
             reset();
             input.value = '............';
@@ -60,10 +60,14 @@ function calculate(){
         //     currentInput = resultStr;  
         //     return;
         // }
-
-        input.value = result;
+        if (result < 0){
+            input.value = -result + '-';
+        }
+        else{
+            input.value = result + ' ';
+        }
         currentInput = result.toString();
-        shownInput = result.toString();
+        shownInput = input.value;
         if(lastInput != ''){
             tempInput = lastInput;
         }
@@ -78,9 +82,7 @@ function calculate(){
     }
 }
 
-// Функция для проверки длины
 function canAddToInput(value) {
-    // Проверка, не превышает ли длина 12 символов
     return (shownInput + value).length <= 12;
 }
 
@@ -90,7 +92,7 @@ function reset(){
     lastInput = '';  
     firstInput = '';  
     tempInput = '';  
-    input.value = '0.00';  
+    input.value = '0.00 ';  
     isOperatorClicked = false;  
 
 }
@@ -145,9 +147,14 @@ buttons.forEach(function(button) {
         else if (btnVal === '/-/'){
             mistakeCheck = 0;
             var reverseNumber = -parseFloat(currentInput);
-            input.value = reverseNumber;
+            if (reverseNumber < 0){
+                input.value = -reverseNumber + '-';
+            }
+            else{
+                input.value = reverseNumber + ' ';
+            }
             currentInput = reverseNumber.toString();
-            shownInput = currentInput;
+            shownInput = input.value;
         }
         // Операции
         else if (operators.includes(btnVal)){
@@ -158,6 +165,7 @@ buttons.forEach(function(button) {
             mistakeCheck = 0;
             isOperatorClicked = true;
             currentInput += ' ' + ' ' + btnVal;
+            console.log(shownInput);
             input.value = shownInput;
             shownInput = '';
         }
