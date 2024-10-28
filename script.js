@@ -1,6 +1,6 @@
 const buttons = document.querySelectorAll(".buttons");
 const input = document.querySelector("#result");
-const operators = ['+', '-', '*', '/','%', '/-/'];
+const operators = ['+', '-', '*', '/','%', '/-/', '1/x', '↔'];
 var decimalAdded = false;
 var memoryStorage = 0;
 var isOperatorClicked = false;
@@ -25,7 +25,6 @@ function fun1() {
     }
 }
 
-//TODO при смене знака исчезает дробная часть; убарть возможность нескольких запятых
 function calculate(){
     try{
         if(lastInput === '' && isOperatorClicked === true){
@@ -35,8 +34,8 @@ function calculate(){
         {
             currentInput+= lastInput;
         }
-         // Обработка процента
-         if (currentInput.includes('%')) {
+    
+        if (currentInput.includes('%')) {
             var t = parseFloat(firstInput) /100 *parseFloat(lastInput);
             currentInput = firstInput + ' '+oper+' '+t;
             console.log(currentInput);
@@ -50,16 +49,6 @@ function calculate(){
             return;  
         }
 
-        // // Проверка на диапазон больше 10^12 - 1, но меньше 10^16 - 1
-        // if (result > (10**12 - 1) && result <= (10**16 - 1)) {
-        //     var adjustedResult = result / 10000;
-        //     // Преобразуем результат в строку и добавляем 4 нуля в конец 
-        //     var resultStr = adjustedResult;
-        //     // Отображаем результат на экране без десятичной точки
-        //     input.value = resultStr;
-        //     currentInput = resultStr;  
-        //     return;
-        // }
         if (result < 0){
             input.value = -result + '-';
         }
@@ -156,6 +145,24 @@ buttons.forEach(function(button) {
             currentInput = reverseNumber.toString();
             shownInput = input.value;
         }
+        else if(btnVal === '1/x'){
+            mistakeCheck = 0;
+            var returnNumber = 1 / parseFloat(currentInput);
+            if (returnNumber < 0){
+                input.value = -returnNumber + '-';
+            }
+            else{
+                input.value = returnNumber + ' ';
+            }
+            currentInput = returnNumber.toString();
+            shownInput = input.value;
+        }
+        else if(btnVal === '↔'){
+            mistakeCheck = 0;
+            var sp = currentInput.split(' ');
+            currentInput = sp[2] + ' ' + sp[1] + ' ' + sp[0];
+            console.log(currentInput);
+        }
         // Операции
         else if (operators.includes(btnVal)){
             if(btnVal != '%'){
@@ -164,11 +171,11 @@ buttons.forEach(function(button) {
             timesClicked += 1;
             mistakeCheck = 0;
             isOperatorClicked = true;
-            currentInput += ' ' + ' ' + btnVal;
-            console.log(shownInput);
+            currentInput += ' '  + btnVal + ' ';
             input.value = shownInput;
             shownInput = '';
         }
+
         //Добавляем введенное значение
         else {
             mistakeCheck = 0;
