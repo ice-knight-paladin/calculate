@@ -27,6 +27,7 @@ function fun1() {
 
 function calculate(){
     try{
+        console.log(currentInput);
         if(lastInput === '' && isOperatorClicked === true){
             currentInput += tempInput;
         }
@@ -34,11 +35,20 @@ function calculate(){
         {
             currentInput+= lastInput;
         }
+        console.log(oper);
     
         if (currentInput.includes('%')) {
-            var t = parseFloat(firstInput) /100 *parseFloat(lastInput);
-            currentInput = firstInput + ' '+oper+' '+t;
-            console.log(currentInput);
+            console.log(currentInput.indexOf('%'), (currentInput.length - 1));
+            if (currentInput.indexOf('%') === (currentInput.length - 1)){
+                var t = parseFloat(firstInput) /100 *parseFloat(lastInput);
+                currentInput = firstInput + ' '+ oper +' '+t;
+                console.log(currentInput);
+            }
+            else{
+                var t = parseFloat(firstInput) / 100 * parseFloat(lastInput);
+                console.log(t);
+                currentInput = t.toString();
+            }
         }
         currentInput = currentInput.replace(/,/g, '.');
         var result = eval(currentInput);
@@ -48,12 +58,64 @@ function calculate(){
             input.value = '............';
             return;  
         }
-
-        if (result < 0){
-            input.value = -result + '-';
-        }
-        else{
-            input.value = result + ' ';
+        if (reduction === false){
+            if (result < 0){
+                input.value = -result + '-';
+            }
+            else{
+                input.value = result + ' ';
+            }
+        }else{
+            if (result.toString().indexOf('.') != -1){
+                const dotIndex = result.toString().indexOf('.');
+                if (dotIndex + 2 < result.toString().length){
+                    const thirdChar = (result.toString() + '00').charAt(dotIndex + 3);
+                    console.log(thirdChar);
+                    if (parseInt(thirdChar) < 5){
+                        result = parseFloat(result.toString().substring(0, dotIndex + 3));
+                        if (result < 0){
+                            input.value = -result + '-';
+                        }
+                        else{
+                            input.value = result + ' ';
+                        }
+                    } else{
+                        if ((parseFloat(result.toString().substring(0, dotIndex + 3)) + 0.01).toString().length > dotIndex + 3){
+                            result = parseFloat(result.toString().substring(0, dotIndex + 2) + (parseInt(result.toString().charAt(dotIndex + 2)) + 1));
+                            console.log(result);
+                        
+                        }
+                        else{
+                            result = parseFloat(result.toString().substring(0, dotIndex + 3))+ 0.01;
+                            result = result.toString();
+                            result = result.slice(0,5);
+                            console.log('qwe', result);
+                        }
+                        
+                        if (result < 0){
+                            input.value = -result + '-';
+                        }
+                        else{
+                            input.value = result + ' ';
+                        }
+                    }
+                } else{
+                    if (result < 0){
+                        input.value = -result + '-';
+                    }
+                    else{
+                        input.value = result + ' ';
+                    }
+                }
+            }
+            else{
+                if (result < 0){
+                    input.value = -result + '-';
+                }
+                else{
+                    input.value = result + ' ';
+                }
+            }
         }
         currentInput = result.toString();
         shownInput = input.value;
@@ -97,21 +159,7 @@ buttons.forEach(function(button) {
         }
         // Очистка дисплея, добавить исправление ошибки ввода
         else if (btnVal === 'C'){
-            if (mistakeCheck === 0) {
-                mistakeCheck = 1;
-                if(lastInput === ''){
-                    currentInput = currentInput.slice(0,-2);
-                }
-                else{
-                lastInput = '';
-                currentInput = currentInput.slice(0,-3);
-                }
-                
-            }
-            else{
-                mistakeCheck = 0;
-                reset();
-            }
+            reset();
         }
         else if (btnVal === 'П+'){
             mistakeCheck = 0;
@@ -209,6 +257,21 @@ buttons.forEach(function(button) {
             }
         }
         // Операции
+        else if(btnVal === '%'){
+            mistakeCheck = 0;
+            if (oper != ''){
+                if (currentInput.split(' ').length >= 3){
+                    currentInput += ' ' + btnVal;
+                }
+            }else{
+                currentInput += ' ' + btnVal + ' ';
+                timesClicked += 1;
+                mistakeCheck = 0;
+                isOperatorClicked = true;
+                input.value = shownInput;
+                shownInput = '';
+            }
+        }
         else if (operators.includes(btnVal)){
             if(btnVal != '%'){
                 oper = btnVal;
