@@ -14,6 +14,7 @@ body {
     background: url(images/MK-42.png);
 }
 .calc_result {
+    white-space: pre;
     font-family: "Electronica";
     padding-right: 50px;
     text-align: right;

@@ -122,7 +122,7 @@ function calculate(){
         if(lastInput != ''){
             tempInput = lastInput;
         }
-        firstInput = '';
+        firstInput = result.toString();
         lastInput = '';
         timesClicked = 0;
         isOperatorClicked = false;
@@ -152,6 +152,12 @@ function reset(){
 buttons.forEach(function(button) {
     button.addEventListener('click', function(event) {
         var btnVal = event.target.innerText;
+        if (btnVal.indexOf('1') != -1 & btnVal.indexOf('2') != -1){
+            return;
+        }
+        if (btnVal.length === 0){
+            return;
+        }
 
         if(btnVal === '=') {
             mistakeCheck = 0;
@@ -181,9 +187,14 @@ buttons.forEach(function(button) {
         }
         else if (btnVal === 'ИП'){
             mistakeCheck = 0;
-            input.value = memoryStorage;
-            currentInput = memoryStorage.toString();
-            shownInput = memoryStorage.toString();
+            currentInput += memoryStorage.toString();
+            if (memoryStorage>=0){
+                input.value = memoryStorage;
+                shownInput = memoryStorage.toString();
+            }else{
+                input.value = (-memoryStorage).toString() + '-';
+                shownInput = input.value;
+            }
         }
         else if (btnVal === 'СП'){
             mistakeCheck = 0;
@@ -194,6 +205,7 @@ buttons.forEach(function(button) {
             mistakeCheck = 0;
             console.log(currentInput.split(' '));
             if (currentInput.split(' ').length === 3){
+                lastInput = lastInput.replace(',', '.');
                 var reverseNumber = -parseFloat(lastInput);
                 if (reverseNumber < 0){
                     input.value = -reverseNumber + '-';
@@ -206,7 +218,9 @@ buttons.forEach(function(button) {
                 lastInput = reverseNumber.toString();
                 shownInput = input.value;
             }else{
+                firstInput = firstInput.replace(',', '.');
                 var reverseNumber = -parseFloat(firstInput);
+                console.log(reverseNumber);
                 if (reverseNumber < 0){
                     input.value = -reverseNumber + '-';
                 }
@@ -218,19 +232,71 @@ buttons.forEach(function(button) {
                 firstInput = reverseNumber.toString();
                 shownInput = input.value;
             }
-
         }
         else if(btnVal === '1/x'){
             mistakeCheck = 0;
-            var returnNumber = 1 / parseFloat(currentInput);
-            if (returnNumber < 0){
-                input.value = -returnNumber + '-';
+            var result = 1 / parseFloat(currentInput);
+            if (reduction === false){
+                if (result < 0){
+                    input.value = -result + '-';
+                }
+                else{
+                    input.value = result + ' ';
+                }
+            }else{
+                if (result.toString().indexOf('.') != -1){
+                    const dotIndex = result.toString().indexOf('.');
+                    if (dotIndex + 2 < result.toString().length){
+                        const thirdChar = (result.toString() + '00').charAt(dotIndex + 3);
+                        console.log(thirdChar);
+                        if (parseInt(thirdChar) < 5){
+                            result = parseFloat(result.toString().substring(0, dotIndex + 3));
+                            if (result < 0){
+                                input.value = -result + '-';
+                            }
+                            else{
+                                input.value = result + ' ';
+                            }
+                        } else{
+                            if ((parseFloat(result.toString().substring(0, dotIndex + 3)) + 0.01).toString().length > dotIndex + 3){
+                                result = parseFloat(result.toString().substring(0, dotIndex + 2) + (parseInt(result.toString().charAt(dotIndex + 2)) + 1));
+                                console.log(result);
+                            
+                            }
+                            else{
+                                result = parseFloat(result.toString().substring(0, dotIndex + 3))+ 0.01;
+                                result = result.toString();
+                                result = result.slice(0,5);
+                                console.log('qwe', result);
+                            }
+                            
+                            if (result < 0){
+                                input.value = -result + '-';
+                            }
+                            else{
+                                input.value = result + ' ';
+                            }
+                        }
+                    } else{
+                        if (result < 0){
+                            input.value = -result + '-';
+                        }
+                        else{
+                            input.value = result + ' ';
+                        }
+                    }
+                }
+                else{
+                    if (result < 0){
+                        input.value = -result + '-';
+                    }
+                    else{
+                        input.value = result + ' ';
+                    }
+                }
             }
-            else{
-                input.value = returnNumber + ' ';
-            }
-            currentInput = returnNumber.toString();
-            shownInput = input.value;
+
+            currentInput = result.toString();
         }
         else if(btnVal === '↔'){
             mistakeCheck = 0;
@@ -283,7 +349,7 @@ buttons.forEach(function(button) {
             mistakeCheck = 0;
             isOperatorClicked = true;
             currentInput += ' '  + btnVal + ' ';
-            input.value = shownInput;
+            input.value = shownInput + ' ';
             shownInput = '';
         }
 
@@ -295,9 +361,10 @@ buttons.forEach(function(button) {
                     if(!operators.some(op1 => currentInput.includes(op1))){
                         firstInput += btnVal;
                     } 
-                    shownInput += btnVal;
+                    shownInput = firstInput;
                     currentInput += btnVal;
-                    input.value = shownInput;
+                    input.value = shownInput + ' ';
+                    console.log(input.value);
                 }
             }
             else{
@@ -308,7 +375,7 @@ buttons.forEach(function(button) {
                 }
                 shownInput = lastInput;
                 currentInput += btnVal;
-                input.value = shownInput;
+                input.value = shownInput + ' ';
               }
             }
         }
