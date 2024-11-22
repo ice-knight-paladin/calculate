@@ -13,7 +13,6 @@ var mistakeCheck = 0;
 var oper = '';
 var timesClicked = 0;
 var reduction;
-input.value = '0.00 ';
 
 function fun1() {
     var ch;
@@ -23,7 +22,15 @@ function fun1() {
     } else {
         reduction = true;
     }
+
+    if (reduction){
+        input.value = '0.00 ';
+    } else{
+        input.value = '0. ';
+    }
 }
+
+
 
 function calculate(){
     try{
@@ -51,19 +58,35 @@ function calculate(){
             }
         }
         currentInput = currentInput.replace(/,/g, '.');
-        var result = eval(currentInput);
+        var result = 0;
+        console.log(lastInput, currentInput);
+        if (lastInput === '0' && currentInput.indexOf("/") != -1){
+            result = 10000000000000;
+        }
+        else{
+            var result = eval(currentInput);
+            console.log(result);
+        }
         if(result > (10**13 - 1)) {
             tempInput = '';
             reset();
-            input.value = '............';
+            input.value = '.............-';
             return;  
         }
         if (reduction === false){
             if (result < 0){
-                input.value = -result + '-';
+                if (result.toString().indexOf('.') != -1){
+                    input.value = -result + '-';
+                }else{
+                    input.value = -result + '.-';
+                }
             }
             else{
-                input.value = result + ' ';
+                if (result.toString().indexOf('.') != -1){
+                    input.value = result + ' ';
+                }else{
+                    input.value = result + '. ';
+                }
             }
         }else{
             if (result.toString().indexOf('.') != -1){
@@ -87,9 +110,6 @@ function calculate(){
                         }
                         else{
                             result = parseFloat(result.toString().substring(0, dotIndex + 3))+ 0.01;
-                            result = result.toString();
-                            result = result.slice(0,5);
-                            console.log('qwe', result);
                         }
                         
                         if (result < 0){
@@ -110,10 +130,10 @@ function calculate(){
             }
             else{
                 if (result < 0){
-                    input.value = -result + '-';
+                    input.value = -result + '.-';
                 }
                 else{
-                    input.value = result + ' ';
+                    input.value = result + '. ';
                 }
             }
         }
@@ -143,9 +163,18 @@ function reset(){
     lastInput = '';  
     firstInput = '';  
     tempInput = '';  
-    input.value = '0.00 ';  
-    isOperatorClicked = false;  
+    oper ='';
+    if (reduction){
+        input.value = '0.00 ';
+    } else{
+        input.value = '0. ';
+    }
+    isOperatorClicked = false;
+}
 
+function resetC(){
+    reset();
+    memoryStorage = 0;
 }
 
 //событие клика
@@ -165,12 +194,12 @@ buttons.forEach(function(button) {
         }
         // Очистка дисплея, добавить исправление ошибки ввода
         else if (btnVal === 'C'){
-            reset();
+            resetC();
         }
         else if (btnVal === 'П+'){
             mistakeCheck = 0;
+            shownInput = shownInput.replace(',', '.');
             memoryStorage += parseFloat(shownInput);
-            console.log(memoryStorage);
             reset();
             //currentInput = '';
             //shownInput = '';
@@ -178,8 +207,8 @@ buttons.forEach(function(button) {
         }
         else if (btnVal === 'П-'){
             mistakeCheck = 0;
+            shownInput = shownInput.replace(',', '.');
             memoryStorage -= parseFloat(shownInput);
-            console.log(memoryStorage);
             reset();
             //currentInput = '';
             //shownInput = '';
@@ -188,12 +217,53 @@ buttons.forEach(function(button) {
         else if (btnVal === 'ИП'){
             mistakeCheck = 0;
             currentInput += memoryStorage.toString();
-            if (memoryStorage>=0){
-                input.value = memoryStorage;
-                shownInput = memoryStorage.toString();
-            }else{
-                input.value = (-memoryStorage).toString() + '-';
-                shownInput = input.value;
+            if (memoryStorage.toString().indexOf('.') != -1){
+                const dotIndex = memoryStorage.toString().indexOf('.');
+                if (dotIndex + 2 < memoryStorage.toString().length){
+                    const thirdChar = (memoryStorage.toString() + '00').charAt(dotIndex + 3);
+                    console.log(thirdChar);
+                    if (parseInt(thirdChar) < 5){
+                        memoryStorage = parseFloat(memoryStorage.toString().substring(0, dotIndex + 3));
+                        if (memoryStorage < 0){
+                            input.value = -memoryStorage + '-';
+                        }
+                        else{
+                            input.value = memoryStorage + ' ';
+                        }
+                    } else{
+                        if ((parseFloat(memoryStorage.toString().substring(0, dotIndex + 3)) + 0.01).toString().length > dotIndex + 3){
+                            memoryStorage = parseFloat(memoryStorage.toString().substring(0, dotIndex + 2) + (parseInt(memoryStorage.toString().charAt(dotIndex + 2)) + 1));
+                            console.log(memoryStorage);
+                        
+                        }
+                        else{
+                            memoryStorage = parseFloat(memoryStorage.toString().substring(0, dotIndex + 3))+ 0.01;
+                            console.log('qwe', memoryStorage);
+                        }
+                        
+                        if (memoryStorage < 0){
+                            input.value = -memoryStorage + '-';
+                        }
+                        else{
+                            input.value = memoryStorage + ' ';
+                        }
+                    }
+                } else{
+                    if (memoryStorage < 0){
+                        input.value = -memoryStorage + '-';
+                    }
+                    else{
+                        input.value = memoryStorage + ' ';
+                    }
+                }
+            }
+            else{
+                if (memoryStorage < 0){
+                    input.value = -memoryStorage + '.-';
+                }
+                else{
+                    input.value = memoryStorage + '. ';
+                }
             }
         }
         else if (btnVal === 'СП'){
@@ -208,13 +278,20 @@ buttons.forEach(function(button) {
                 lastInput = lastInput.replace(',', '.');
                 var reverseNumber = -parseFloat(lastInput);
                 if (reverseNumber < 0){
-                    input.value = -reverseNumber + '-';
+                    if (reverseNumber.toString().indexOf('.') === -1){
+                        input.value = -reverseNumber + '.-';
+                    } else{
+                        input.value = -reverseNumber + '-';
+                    }
                 }
                 else{
-                    input.value = reverseNumber + ' ';
+                    if (reverseNumber.toString().indexOf('.') === -1){
+                        input.value = reverseNumber + '. ';
+                    } else{
+                        input.value = reverseNumber + ' ';
+                    }
                 }
-                
-                currentInput = currentInput.split(' ')[0] + currentInput.split(' ')[1] + reverseNumber.toString();
+                currentInput = currentInput.split(' ')[0] + ' ' +  currentInput.split(' ')[1] + ' ' + reverseNumber.toString();
                 lastInput = reverseNumber.toString();
                 shownInput = input.value;
             }else{
@@ -222,20 +299,55 @@ buttons.forEach(function(button) {
                 var reverseNumber = -parseFloat(firstInput);
                 console.log(reverseNumber);
                 if (reverseNumber < 0){
-                    input.value = -reverseNumber + '-';
+                    if (reverseNumber.toString().indexOf('.') === -1){
+                        input.value = -reverseNumber + '.-';
+                    } else{
+                        input.value = -reverseNumber + '-';
+                    }
                 }
                 else{
-                    input.value = reverseNumber + ' ';
+                    if (reverseNumber.toString().indexOf('.') === -1){
+                        input.value = reverseNumber + '. ';
+                    } else{
+                        input.value = reverseNumber + ' ';
+                    }
                 }
-                
                 currentInput = reverseNumber.toString();
                 firstInput = reverseNumber.toString();
-                shownInput = input.value;
+                shownInput = reverseNumber.toString();
             }
+            console.log(currentInput);
         }
         else if(btnVal === '1/x'){
             mistakeCheck = 0;
-            var result = 1 / parseFloat(currentInput);
+            if (currentInput.split(' ').length === 3){
+                if (parseFloat(lastInput) === 0){
+                    resetC();
+                    tempInput = '';
+                    input.value = '.............-';
+                    return
+                }
+                var result = 1 / parseFloat(lastInput);
+            }else{
+                if (parseFloat(firstInput) === 0){
+                    resetC();
+                    tempInput = '';
+                    input.value = '.............-';
+                    return
+                }
+                var result = 1 / parseFloat(firstInput);
+            }
+            if (result.toString().length >= 14){
+                if (result.toString().indexOf('.') === -1){
+                    resetC();
+                    tempInput = '';
+                    input.value = '.............-';
+                    return
+                }else{
+                    result = result.toString().slice(0, 13);
+                }
+            }
+            
             if (reduction === false){
                 if (result < 0){
                     input.value = -result + '-';
@@ -264,10 +376,7 @@ buttons.forEach(function(button) {
                             
                             }
                             else{
-                                result = parseFloat(result.toString().substring(0, dotIndex + 3))+ 0.01;
-                                result = result.toString();
-                                result = result.slice(0,5);
-                                console.log('qwe', result);
+                                result = parseFloat(result.toString().substring(0, dotIndex + 3)) + 0.01;
                             }
                             
                             if (result < 0){
@@ -288,37 +397,62 @@ buttons.forEach(function(button) {
                 }
                 else{
                     if (result < 0){
-                        input.value = -result + '-';
+                        input.value = -result + '.-';
                     }
                     else{
-                        input.value = result + ' ';
+                        input.value = result + '. ';
                     }
                 }
             }
-
-            currentInput = result.toString();
+            console.log(currentInput);
+            if (currentInput.split(' ').length != 3){
+                currentInput = result.toString();
+                shownInput = currentInput;
+                firstInput = currentInput;
+            }else{
+                currentInput = currentInput.split(' ')[0] + ' ' + currentInput.split(' ')[1] + ' ' + result.toString();
+                shownInput = result.toString();
+                lastInput = result.toString();
+            }
+            console.log(currentInput);
         }
         else if(btnVal === '↔'){
             mistakeCheck = 0;
             var sp = currentInput.split(' ');
             currentInput = sp[2] + ' ' + sp[1] + ' ' + sp[0];
+            var flag = firstInput;
+            firstInput = lastInput;
+            lastInput = flag;
+            console.log(lastInput);
+            if (lastInput.indexOf('.') === -1){
+                if (lastInput.indexOf('-') != -1){
+                    input.value = lastInput.replace('-', '') + '.-'
+                }else{
+                    input.value = parseFloat(lastInput) + '. '
+                }
+            }else{
+                if (lastInput.indexOf('-') != -1){
+                    input.value = lastInput.replace('-', '') + '-'
+                }else{
+                    input.value = parseFloat(lastInput) + ' '
+                }
+            }
+            console.log(currentInput);
         }
-        else if(btnVal === ','){
+        else if(btnVal === '.'){
             mistakeCheck = 0;
             if (currentInput.split(' ').length > 1){
-                if (lastInput.indexOf(',') === -1){
-                    lastInput += ',';
-                    currentInput += ',';
+                if (lastInput.indexOf('.') === -1){
+                    lastInput += '.';
+                    currentInput += '.';
                     shownInput = lastInput;
-                    input.value = shownInput;
                 }
             }
             else{
-                if (firstInput.indexOf(',') === -1){
-                    firstInput += ',';
-                    currentInput += ',';
+                if (firstInput.indexOf('.') === -1){
+                    firstInput += '.';
+                    currentInput += '.';
                     shownInput = firstInput;
-                    input.value = shownInput;
                 }
             }
         }
@@ -334,7 +468,6 @@ buttons.forEach(function(button) {
                 timesClicked += 1;
                 mistakeCheck = 0;
                 isOperatorClicked = true;
-                input.value = shownInput;
                 shownInput = '';
             }
         }
@@ -349,7 +482,6 @@ buttons.forEach(function(button) {
             mistakeCheck = 0;
             isOperatorClicked = true;
             currentInput += ' '  + btnVal + ' ';
-            input.value = shownInput + ' ';
             shownInput = '';
         }
 
@@ -363,7 +495,20 @@ buttons.forEach(function(button) {
                     } 
                     shownInput = firstInput;
                     currentInput += btnVal;
-                    input.value = shownInput + ' ';
+                    if (firstInput.indexOf('.') === -1){
+                        if (shownInput.indexOf('-')=== -1){
+                            input.value = shownInput + '. ';
+                        }else{
+                            input.value = shownInput.replace('-', '') + '.-';
+                        }
+                    }else{
+                        if (shownInput.indexOf('-')=== -1){
+                            input.value = shownInput + ' ';
+                        }else{
+                            input.value = shownInput.replace('-', '') + '-';
+                        }
+                    }
+
                     console.log(input.value);
                 }
             }
@@ -375,7 +520,19 @@ buttons.forEach(function(button) {
                 }
                 shownInput = lastInput;
                 currentInput += btnVal;
-                input.value = shownInput + ' ';
+                if (lastInput.indexOf('.') === -1){
+                    if (shownInput.indexOf('-')=== -1){
+                        input.value = shownInput + '. ';
+                    }else{
+                        input.value = shownInput.replace('-', '') + '.-';
+                    }
+                }else{
+                    if (shownInput.indexOf('-')=== -1){
+                        input.value = shownInput + ' ';
+                    }else{
+                        input.value = shownInput.replace('-', '') + '-';
+                    }
+                }
               }
             }
         }
