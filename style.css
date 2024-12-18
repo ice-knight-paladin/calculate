@@ -8,6 +8,9 @@ body {
     justify-content: center;
     align-items: center;
 }
+.RR {
+    display: flex;
+}
 .calc {
     width: 1000;
     height: 820px;
@@ -16,19 +19,15 @@ body {
 .calc_result {
     white-space: pre;
     font-family: "Electronica";
-    padding-right: 50px;
     text-align: right;
     margin-top: 337px;
-    margin-left: 25px;
-    text-indent: 120px;
     text-shadow: 2px 1px 1px #25a159;
-    height: 40px;
-    width: 602px;
-    display: grid;
-    justify-items: auto;
+    height: 70px;
+    width: 46px;
+    display: flex;
     background-color: rgb(26, 24, 24);
     color: rgb(62, 151, 62);
-    font-size: 40px;
+    font-size: 70px;
 }
 .buttons {
     margin-left: 20px;
@@ -95,7 +94,7 @@ input[type="checkbox"] {
     outline: none;
     background: #1b1717;
     transition: 0.5s;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 5px rgba(204, 201, 201, 0.2);
 }
 input[type="checkbox"]:before {
     content: "";
@@ -105,11 +104,16 @@ input[type="checkbox"]:before {
     top: 0;
     left: 0;
     border-radius: 2px;
-    background: rgb(49, 49, 49);
+    background: rgb(167, 161, 161);
     transition: 0.5s;
     transform: scale(1, 1);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px rgba(0, 255, 0, 0.2);
 }
 input:checked[type="checkbox"]:before {
     left: 25px;
+}
+iframe {
+    width: 50%;
+    height: 100vh;
+    border: none;
 }
